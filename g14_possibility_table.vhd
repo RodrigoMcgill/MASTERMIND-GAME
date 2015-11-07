@@ -23,9 +23,8 @@ Architecture imp of g14_possibility_table is
 --signal flag : std_logic;
 SIGNAL count   : std_logic_vector (11 downto 0);
 SIGNAL TC_LAST_flag : std_logic;
+SIGNAL TM_OUT_flag: std_logic;
 begin
-
-
 
 
 process (CLK, TC_RST, TC_EN)
@@ -76,19 +75,33 @@ process(count)
 			end if;
 	end process;
 	
+process (CLK)
+
+ begin
+ 
+     if(rising_edge(CLK)) then
+	  
+			   if(TM_EN ='1' and TM_IN = '1') then   
+			   TM_OUT_flag <= '0';
+				
+				elsif( TM_EN = '0' and TM_IN = '1') then
+				TM_OUT_flag <= '1';
+				
+				elsif( TM_EN = '1'and TM_IN = '0') then
+				TM_OUT_flag <= '0';
+				
+				elsif (TM_EN = '0' and TM_IN = '0') then
+				TM_OUT_flag <= '0';
+					   
+			 
+			 
+			      
+			 end if;
+	 end if;
 	
-	process (TM_EN, TM_IN,CLK)
-	
-		begin
-		
-		if(TM_EN = '1' and rising_edge(CLK)) then
-		
-			TM_OUT <= TM_IN;
-	
-	   end if;
-	   end process;
-   
+   end process;
 
 	TM_ADDR <= count ;
    TC_LAST <= TC_LAST_flag;
+	TM_OUT  <= TM_OUT_flag;
 end imp;
