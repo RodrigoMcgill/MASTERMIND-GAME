@@ -7,7 +7,7 @@ entity g14_lab4_tesbed is
 
 port(	clk,en,reset	:	in std_logic;
 		mode				:	in std_logic_vector(1 downto 0);
-		print1, print2	: out std_logic_vector(7 downto 0));
+		printL, printR	: out std_logic_vector(7 downto 0));
 		
 end g14_lab4_tesbed;
 
@@ -48,8 +48,8 @@ begin
 
 FDivider: g14_lab4_frequencyDivier port map(clk => clk, en => en, reset => reset, newClk => clock);
 complex : g14_lab4_complexCounterFSM port map(en => en, clk => clock, input => mode, z => print);
-encod1  : g14_7_segment_decoder port map(code => print(7 downto 4), RippleBlank_In => '1', segments => print1);
-encod2  : g14_7_segment_decoder port map(code => print(3 downto 0), RippleBlank_In => '0', segments => print2);
+encod1  : g14_7_segment_decoder port map(code => print(7 downto 4), RippleBlank_In => '1', segments => printL);
+encod2  : g14_7_segment_decoder port map(code => print(3 downto 0), RippleBlank_In => '0', segments => printR);
 
 end behavior;
  
