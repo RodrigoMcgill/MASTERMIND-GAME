@@ -44,22 +44,12 @@ port(	clk,en	: in std_logic;
 		
 end component;
 
+begin
+
 FDivider: g14_lab4_frequencyDivier port map(clk => clk, en => en, reset => reset, newClk => clock);
 complex : g14_lab4_complexCounterFSM port map(en => en, clk => clock, input => mode, z => print);
 encod1  : g14_7_segment_decoder port map(code => print(7 downto 4), RippleBlank_In => '1', segments => print1);
 encod2  : g14_7_segment_decoder port map(code => print(7 downto 4), RippleBlank_In => '0', segments => print1);
-
-begin
-process (clk)
-begin
-
-end process;
-
-process (clock)
-begin
-
-end process;
-
 
 end behavior;
  
