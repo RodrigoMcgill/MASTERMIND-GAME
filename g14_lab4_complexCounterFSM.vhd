@@ -4,9 +4,10 @@ use ieee.std_logic_1164.all;
 
 entity g14_lab4_complexCounterFSM is
 
-port( EN,CLK: IN std_logic;
+port( EN,CLK,RST: IN std_logic;
        input:IN std_logic_vector(1 DOWNTO 0);
            z: OUT std_logic_vector(7 DOWNTO 0));
+			  
 
 end g14_lab4_complexCounterFSM;
 
@@ -22,8 +23,11 @@ architecture behavior of g14_lab4_complexCounterFSM is
 		PROCESS(CLK,EN)
 		BEGIN
 		
-				
-	if(rising_edge(CLK)) then
+	 if (RST = '1') then
+	 
+	 y <= A;
+ 	 
+	elsif(rising_edge(CLK)) then
 		
 	  if(EN = '0') then
 	  y <= y ;
@@ -438,13 +442,13 @@ architecture behavior of g14_lab4_complexCounterFSM is
 					z <= "00110111";
 					
 					WHEN M =>  --41
-					z <= "10000001";
+					z <= "01000001";
 					
 					WHEN N =>   --43
-					z <= "10000011";
+					z <= "01000011";
 					
 				   WHEN O =>    --47
-					z <= "10000111";
+					z <= "01000111";
 					
 					WHEN P =>    --53
 					z <= "01010011";
