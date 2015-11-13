@@ -17,22 +17,27 @@ port(	clk,en	: in std_logic;
 end g14_lab4_frequencyDivier;
 
 architecture behavior of g14_lab4_frequencyDivier is
-signal count : integer(n downto 0);
-
+signal count : integer;
+signal clock : std_logic;
 begin
+
+newClk <= clock;
 
 process(clk,reset)
 
+begin
 		if(reset = '1') then
-			count<= std_logic_vector(to_unsigned(0,20));
-			newClk <= '0'
-		elsif(rising_edge(clk) )then
+			count<= 0;
+			clock <= '0';
+		elsif(rising_edge(clk))then
 				if(count = n) then
+					clock <= '1';
+				elsif(count = n+n) then
 					count <= 0;
-					newClk <= newClk+1;
-				elsif() then
+					clock <= '0';
+				elsif(en <= '0') then
 					count <= count + 1;
 				end if;
 		end if;
-
+end process;
 end behavior;
