@@ -7,7 +7,6 @@ entity g14_lab4_tesbed is
 
 port(	clk,en,reset	: in std_logic;
 		mode				: in std_logic_vector(1 downto 0);
-		-- GND				: out std_logic; -- to be connected to ground.
 		printL, printR	: out std_logic_vector(6 downto 0));
 		
 end g14_lab4_tesbed;
