@@ -12,7 +12,7 @@ end g14_mastermind_controller;
 
 architecture behavior of g14_mastermind_controller is
 	signal isSolved = std_logic;
-	TYPE state_type IS (waitStart,startTable,setTable,waitReady,checkGuess,addScore,getNextGuess,last);
+	TYPE state_type IS (waitStart,resetCounter,setTable,waitReady,checkGuess,addScore,getNextGuess,last);
 	Signal y : state_type;
 	signal output : std_logic_vector(9 downto 0);
 
@@ -36,13 +36,23 @@ begin
 			when waitStart =>
 				output <= "0000000000";
 				if(START = '1') then
-					y <= startTable;
+					y <= resetCounter;
 				end if;
 				
 -- resets the couter in the table
-			when startTable =>
-				output <= "0000000000";
+			when resetCounter =>
+				output <= "01000-0010";
+				if() then 
 				y <= setTable;
+				elsif() then
+				y <= ;
+				elsif() then
+				y <= ;
+				elsif() then
+				y <= ;
+				elsif() then
+				y <= ;
+				end if;
 			
 -- sets all the value of the possibility table to 1
 			when setTable =>
