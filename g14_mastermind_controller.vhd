@@ -42,36 +42,40 @@ begin
 -- resets the couter in the table
 			when resetCounter =>
 				output <= "01000-0010";
-				if() then 
-				y <= setTable;
+				if(START = '0') then 
+					y <= waitStart;
 				elsif() then
-				y <= ;
+					y <= setTable;
 				elsif() then
-				y <= ;
+					y <= ;
 				elsif() then
-				y <= ;
-				elsif() then
-				y <= ;
+					y <= ;
 				end if;
 			
 -- sets all the value of the possibility table to 1
 			when setTable =>
 				output <= "0000001100";
-				if (TC_LAST = '1') then
+				if(START = '0') then 
+					y <= waitStart;
+				elsif (TC_LAST = '1') then
 					y <= waitReady;
 				end if;
 
 -- waits for Ready signal from the oponent
 			when waitReady =>
 				output <= "0000000000";
-				if(READY='1')) then
+				if(START = '0') then 
+					y <= waitStart;
+				elsif(READY='1')) then
 					y <= checkGuess;
 				end if;
 			
 -- checks if the guess is correct
 			when checkGuess =>
 				output <= "0000000000";
-				if(READY='0')) then
+				if(START = '0') then 
+					y <= waitStart;
+				elsif(READY='0')) then
 					if (SC_CMP = '1') then
 						y <= Last;
 					elsif (SC_CMP = '0') then
@@ -82,11 +86,16 @@ begin
 -- is the guess is not correct it adds the result into the possibility table	
 			when addScore =>
 				output <= "0000000000";
+				if(START = '0') then 
+					y <= waitStart;
+				end if;
 				
 -- take the first value of the possibility table that is non zero
 			when getNextGuess =>
 				output <= "0000000000";
-			
+				if(START = '0') then 
+					y <= waitStart;
+				end if;
 -- the bot has guessed the pattern
 			when Last => 
 				output <= "0000000000";
