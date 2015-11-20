@@ -41,20 +41,21 @@ begin
 				
 -- resets the couter in the table
 			when resetCounter =>
-				output <= "01000-0010";
+				output <= "0--00-0010";
 				if(START = '0') then 
 					y <= waitStart;
-				elsif() then
+				elsif(TC_LAST = '0') then
 					y <= setTable;
-				elsif() then
-					y <= ;
-				elsif() then
-					y <= ;
+					if(READY = '0') then
+						y <= setTable;
+					elsif(READY = '1') then
+						y <= addScore;
+					end if;
 				end if;
 			
 -- sets all the value of the possibility table to 1
 			when setTable =>
-				output <= "0000001100";
+				output <= "0--0011100";
 				if(START = '0') then 
 					y <= waitStart;
 				elsif (TC_LAST = '1') then
@@ -63,24 +64,26 @@ begin
 
 -- waits for Ready signal from the oponent
 			when waitReady =>
-				output <= "0000000000";
 				if(START = '0') then 
 					y <= waitStart;
 				elsif(READY='1')) then
-					y <= checkGuess;
+					if(TC_LAST = '1') then
+						output <= "00111-0000";
+						y <= checkGuess;
+					elsif(TC_LAST = '0') then
+						output <= "00011-0000";
+						y <= checkGuess;
 				end if;
 			
 -- checks if the guess is correct
 			when checkGuess =>
-				output <= "0000000000";
+				output <= "11-00-0000";
 				if(START = '0') then 
 					y <= waitStart;
-				elsif(READY='0')) then
-					if (SC_CMP = '1') then
+				elsif (SC_CMP = '1') then
 						y <= Last;
-					elsif (SC_CMP = '0') then
+				elsif (SC_CMP = '0') then
 						y <= addScore;
-					end if;
 				end if;
 
 -- is the guess is not correct it adds the result into the possibility table	
