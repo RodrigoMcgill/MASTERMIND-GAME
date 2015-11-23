@@ -59,6 +59,7 @@ begin
 				if(START = '0') then 
 					y <= waitStart;
 				elsif (TC_LAST = '1') then
+					output <= "0--00-0000";
 					y <= waitReady;
 				end if;
 
@@ -77,20 +78,24 @@ begin
 			
 -- checks if the guess is correct
 			when checkGuess =>
-				output <= "11-00-0000";
+				output <= "01-00-0000";
 				if(START = '0') then 
 					y <= waitStart;
 				elsif (SC_CMP = '1') then
 						y <= Last;
 				elsif (SC_CMP = '0') then
+						output <= "11-00-0100";
 						y <= addScore;
 				end if;
 
 -- is the guess is not correct it adds the result into the possibility table	
 			when addScore =>
-				output <= "0000000000";
 				if(START = '0') then 
 					y <= waitStart;
+				elsif(SC_CMP = '0') then
+					output <= "11-0001100";
+				elsif(SC_CMP = ) then
+					output <= "11-0011000";
 				end if;
 				
 -- take the first value of the possibility table that is non zero
