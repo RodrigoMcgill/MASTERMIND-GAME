@@ -11,7 +11,7 @@ port(	SC_CMP,TC_LAST,START,READY,CLK	: in std_logic;
 end g14_mastermind_controller;
 
 architecture behavior of g14_mastermind_controller is
-	signal isSolved = std_logic;
+	signal isSolved : std_logic;
 	TYPE state_type IS (waitStart,resetCounter,setTable,waitReady,checkGuess,addScore,getNextGuess,last);
 	Signal y : state_type;
 	signal output : std_logic_vector(9 downto 0);
@@ -35,80 +35,98 @@ begin
 -- waits for the start signal which means a new game.
 			when waitStart =>
 				output <= "0000000000";
-				if(START = '1') then
-					y <= resetCounter;
+				if(START = '1') then                 
+					y <= resetCounter;       
+				else
+				   y <= waitStart;
 				end if;
 				
--- resets the couter in the table
+-- resets the counter in the table
 			when resetCounter =>
 				output <= "0--00-0010";
 				if(START = '0') then 
 					y <= waitStart;
-				elsif(TC_LAST = '0') then
-					y <= setTable;
-					if(READY = '0') then
-						y <= setTable;
-					elsif(READY = '1') then
-						y <= addScore;
-					end if;
-				end if;
+				else 
+				      if(TC_LAST = '0') then
+						        if(READY = '0') then
+					           y <= setTable;
+					           elsif(READY = '1') then
+					           y <= addScore;
+					           end if;
+				      end if;
+			 end if;
 			
 -- sets all the value of the possibility table to 1
 			when setTable =>
-				output <= "0--0011100";
-				if(START = '0') then 
+		   output <= "0--0011100";
+			if(START = '0') then 
 					y <= waitStart;
-				elsif (TC_LAST = '1') then
+			elsif (TC_LAST = '1') then
 					output <= "0--00-0000";
 					y <= waitReady;
-				end if;
+			end if;
+
 
 -- waits for Ready signal from the oponent
 			when waitReady =>
-				if(START = '0') then 
+			if(START = '0') then 
 					y <= waitStart;
-				elsif(READY='1')) then
+			elsif(READY='1') then
 					if(TC_LAST = '1') then
-						output <= "00111-0000";
-						y <= checkGuess;
+								output <= "10111-0000";
+								y <= checkGuess;
 					elsif(TC_LAST = '0') then
-						output <= "00011-0000";
-						y <= checkGuess;
-				end if;
+								output <= "00011-0000";
+								y <= checkGuess;
+		         end if;
+			end if;
 			
--- checks if the guess is correct
+-- checks if the first trivial guess is correct
 			when checkGuess =>
-				output <= "01-00-0000";
+				output <= "10-00-0000";
 				if(START = '0') then 
 					y <= waitStart;
 				elsif (SC_CMP = '1') then
 						y <= Last;
 				elsif (SC_CMP = '0') then
-						output <= "11-00-0100";
+						if(TC_LAST = '1')then
+							output <= "01-00-0110";
+						elsif(TC_LAST = '0') then 
+							output <= "01-00-0100";
 						y <= addScore;
+				      end if;
 				end if;
 
 -- is the guess is not correct it adds the result into the possibility table	
 			when addScore =>
 				if(START = '0') then 
 					y <= waitStart;
+				elsif(TC_LAST = '1' and SC_CMP = '0') then
+					output <= "01-0001100";
 				elsif(SC_CMP = '0') then
-					output <= "11-0001100";
-				elsif(SC_CMP = ) then
-					output <= "11-0011000";
+					output <= "01-0001100";
+				elsif(SC_CMP = '1') then
+					output <= "01-0011000";
+					y <= getNextGuess;
 				end if;
 				
 -- take the first value of the possibility table that is non zero
 			when getNextGuess =>
-				output <= "0000000000";
+				output <= "00-00-0000";
 				if(START = '0') then 
 					y <= waitStart;
+				elsif(READY = '0') then
+					y <= waitReady;
 				end if;
+				
 -- the bot has guessed the pattern
 			when Last => 
-				output <= "0000000000";
+				output <= "---00-0001";
 				if (START = '0') then
-					y <= waitStart;
+					y <= waitStart
+				else   -- JC: I don't think this is really necessary, 
+						 -- since the y value is already "last".
+				   y <= LAST;
 				end if;
 		end case;
 	end if;
