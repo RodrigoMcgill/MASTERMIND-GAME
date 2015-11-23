@@ -72,9 +72,11 @@ begin
 			if(START = '0') then 
 					y <= waitStart;
 			elsif(READY='1') then
+			-- If the guess comes from the setTable
 					if(TC_LAST = '1') then
 								output <= "10111-0000";
 								y <= checkGuess;
+			-- If the guess comes form the getNextGuess 
 					elsif(TC_LAST = '0') then
 								output <= "00011-0000";
 								y <= checkGuess;
@@ -86,25 +88,39 @@ begin
 				output <= "10-00-0000";
 				if(START = '0') then 
 					y <= waitStart;
+					
+				-- If the guess is correct go to the end
 				elsif (SC_CMP = '1') then
 						y <= Last;
+						
+				-- If the guess is not correct add the value to the table
 				elsif (SC_CMP = '0') then
+						-- This is for the first call to the table, 
+						-- TC_RST = 1 so the table starts at first element
 						if(TC_LAST = '1')then
-							output <= "01-00-0110";
+							output <= "01-00-0010";
+				-- This is for all subsequent guesses, 
+				-- TC_RST = 0 so the table continues at current values
 						elsif(TC_LAST = '0') then 
-							output <= "01-00-0100";
+							output <= "01-00-0000";
 						y <= addScore;
 				      end if;
+						
 				end if;
 
 -- is the guess is not correct it adds the result into the possibility table	
 			when addScore =>
 				if(START = '0') then 
 					y <= waitStart;
+				-- This case should never happen, but incase it does, it will restart the table.
 				elsif(TC_LAST = '1' and SC_CMP = '0') then
 					output <= "01-0001100";
+				-- If the ADRR doesn't give the same result to the previous guess
+				-- It makes the value at the table 0 and go to the next ADRR
 				elsif(SC_CMP = '0') then
 					output <= "01-0001100";
+				-- If the ADRR gives the same result to the previous guess.
+				-- Stops the clock and  goes to wait for ready signal.
 				elsif(SC_CMP = '1') then
 					output <= "01-0011000";
 					y <= getNextGuess;
@@ -123,8 +139,8 @@ begin
 			when Last => 
 				output <= "---00-0001";
 				if (START = '0') then
-					y <= waitStart
-				else   -- JC: I don't think this is really necessary, 
+					y <= waitStart;
+				else  -- JC: I don't think this is really necessary, 
 						 -- since the y value is already "last".
 				   y <= LAST;
 				end if;
