@@ -43,26 +43,20 @@ begin
 				
 -- resets the counter in the table
 			when resetCounter =>
-				output <= "0--00-0010";
-				if(START = '0') then 
+			output <= "0000000010";
+			if(START = '0') then 
 					y <= waitStart;
-				else 
-				      if(TC_LAST = '0') then
-						        if(READY = '0') then
-					           y <= setTable;
-					           elsif(READY = '1') then
-					           y <= addScore;
-					           end if;
-				      end if;
-			 end if;
+			elsif(TC_LAST = '0') then
+					y <= setTable;
+			end if;
 			
 -- sets all the value of the possibility table to 1
 			when setTable =>
-		   output <= "0--0011100";
+		   output <= "0000011100";
 			if(START = '0') then 
 					y <= waitStart;
 			elsif (TC_LAST = '1') then
-					output <= "0--00-0000";
+					output <= "0000000000";
 					y <= waitReady;
 			end if;
 
@@ -74,18 +68,18 @@ begin
 			elsif(READY='1') then
 			-- If the guess comes from the setTable
 					if(TC_LAST = '1') then
-								output <= "10111-0000";
+								output <= "1011100000";
 								y <= checkGuess;
 			-- If the guess comes form the getNextGuess 
 					elsif(TC_LAST = '0') then
-								output <= "00011-0000";
+								output <= "0001100000";
 								y <= checkGuess;
 		         end if;
 			end if;
 			
 -- checks if the first trivial guess is correct
 			when checkGuess =>
-				output <= "10-00-0000";
+				output <= "1000000000";
 				if(START = '0') then 
 					y <= waitStart;
 					
@@ -98,11 +92,11 @@ begin
 						-- This is for the first call to the table, 
 						-- TC_RST = 1 so the table starts at first element
 						if(TC_LAST = '1')then
-							output <= "01-00-0010";
+							output <= "0100000010";
 				-- This is for all subsequent guesses, 
 				-- TC_RST = 0 so the table continues at current values
 						elsif(TC_LAST = '0') then 
-							output <= "01-00-0000";
+							output <= "0100000000";
 						y <= addScore;
 				      end if;
 						
@@ -114,21 +108,21 @@ begin
 					y <= waitStart;
 				-- This case should never happen, but incase it does, it will restart the table.
 				elsif(TC_LAST = '1' and SC_CMP = '0') then
-					output <= "01-0001100";
+					output <= "0100001100";
 				-- If the ADRR doesn't give the same result to the previous guess
 				-- It makes the value at the table 0 and go to the next ADRR
 				elsif(SC_CMP = '0') then
-					output <= "01-0001100";
+					output <= "0100001100";
 				-- If the ADRR gives the same result to the previous guess.
 				-- Stops the clock and  goes to wait for ready signal.
 				elsif(SC_CMP = '1') then
-					output <= "01-0011000";
+					output <= "0100011000";
 					y <= getNextGuess;
 				end if;
 				
 -- take the first value of the possibility table that is non zero
 			when getNextGuess =>
-				output <= "00-00-0000";
+				output <= "0000000000";
 				if(START = '0') then 
 					y <= waitStart;
 				elsif(READY = '0') then
@@ -137,7 +131,7 @@ begin
 				
 -- the bot has guessed the pattern
 			when Last => 
-				output <= "---00-0001";
+				output <= "0000000001";
 				if (START = '0') then
 					y <= waitStart;
 				else  -- JC: I don't think this is really necessary, 
