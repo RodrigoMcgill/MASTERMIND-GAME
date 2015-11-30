@@ -29,7 +29,7 @@ TC_RST 	<=	output(1);
 SOLVED 	<=	output(0);
 process (clk)
 begin
-	if(rising_edge(clk)) then
+	if(falling_edge(clk)) then
 		case y is
 		
 -- waits for the start signal which means a new game.
@@ -56,7 +56,7 @@ begin
 			if(START = '0') then 
 					y <= waitStart;
 			elsif (TC_LAST = '1') then
-					output <= "0000000000";
+					output <= "1011100000";
 					y <= waitReady;
 			end if;
 
@@ -65,16 +65,18 @@ begin
 			when waitReady =>
 			if(START = '0') then 
 					y <= waitStart;
-			elsif(READY='1') then
+			elsif(READY = '0') then
 			-- If the guess comes from the setTable
 					if(TC_LAST = '1') then
 								output <= "1011100000";
-								y <= checkGuess;
 			-- If the guess comes form the getNextGuess 
 					elsif(TC_LAST = '0') then
-								output <= "0001100000";
-								y <= checkGuess;
+								output <= "1001100000";
 		         end if;
+			elsif(READY='1') then
+			--verifies that the gues is correct
+					output <= "1000000000";
+					y <= checkGuess;
 			end if;
 			
 -- checks if the first trivial guess is correct
@@ -85,6 +87,7 @@ begin
 					
 				-- If the guess is correct go to the end
 				elsif (SC_CMP = '1') then
+						output <= "0000000001";
 						y <= Last;
 						
 				-- If the guess is not correct add the value to the table
@@ -97,7 +100,7 @@ begin
 				-- TC_RST = 0 so the table continues at current values
 						elsif(TC_LAST = '0') then 
 							output <= "0100000000";
-						y <= addScore;
+							y <= addScore;
 				      end if;
 						
 				end if;
@@ -122,7 +125,7 @@ begin
 				
 -- take the first value of the possibility table that is non zero
 			when getNextGuess =>
-				output <= "0000000000";
+				output <= "1000000000";
 				if(START = '0') then 
 					y <= waitStart;
 				elsif(READY = '0') then
@@ -134,8 +137,7 @@ begin
 				output <= "0000000001";
 				if (START = '0') then
 					y <= waitStart;
-				else  -- JC: I don't think this is really necessary, 
-						 -- since the y value is already "last".
+				else 
 				   y <= LAST;
 				end if;
 		end case;
