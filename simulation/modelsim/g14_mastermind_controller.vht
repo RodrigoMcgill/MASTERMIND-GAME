@@ -17,7 +17,7 @@
 -- suit user's needs .Comments are provided in each section to help the user  
 -- fill out necessary details.                                                
 -- ***************************************************************************
--- Generated on "11/23/2015 11:46:00"
+-- Generated on "11/30/2015 18:33:33"
                                                             
 -- Vhdl Test Bench template for design  :  g14_mastermind_controller
 -- 
@@ -38,6 +38,7 @@ SIGNAL GR_SEL : STD_LOGIC;
 SIGNAL P_SEL : STD_LOGIC;
 SIGNAL READY : STD_LOGIC;
 SIGNAL SC_CMP : STD_LOGIC;
+SIGNAL SD_EN : STD_LOGIC;
 SIGNAL SOLVED : STD_LOGIC;
 SIGNAL SR_LD : STD_LOGIC;
 SIGNAL SR_SEL : STD_LOGIC;
@@ -47,6 +48,7 @@ SIGNAL TC_LAST : STD_LOGIC;
 SIGNAL TC_RST : STD_LOGIC;
 SIGNAL TM_EN : STD_LOGIC;
 SIGNAL TM_IN : STD_LOGIC;
+SIGNAL USER : STD_LOGIC;
 COMPONENT g14_mastermind_controller
 	PORT (
 	CLK : IN STD_LOGIC;
@@ -55,6 +57,7 @@ COMPONENT g14_mastermind_controller
 	P_SEL : OUT STD_LOGIC;
 	READY : IN STD_LOGIC;
 	SC_CMP : IN STD_LOGIC;
+	SD_EN : OUT STD_LOGIC;
 	SOLVED : OUT STD_LOGIC;
 	SR_LD : OUT STD_LOGIC;
 	SR_SEL : OUT STD_LOGIC;
@@ -63,7 +66,8 @@ COMPONENT g14_mastermind_controller
 	TC_LAST : IN STD_LOGIC;
 	TC_RST : OUT STD_LOGIC;
 	TM_EN : OUT STD_LOGIC;
-	TM_IN : OUT STD_LOGIC
+	TM_IN : OUT STD_LOGIC;
+	USER : IN STD_LOGIC
 	);
 END COMPONENT;
 BEGIN
@@ -76,6 +80,7 @@ BEGIN
 	P_SEL => P_SEL,
 	READY => READY,
 	SC_CMP => SC_CMP,
+	SD_EN => SD_EN,
 	SOLVED => SOLVED,
 	SR_LD => SR_LD,
 	SR_SEL => SR_SEL,
@@ -84,7 +89,8 @@ BEGIN
 	TC_LAST => TC_LAST,
 	TC_RST => TC_RST,
 	TM_EN => TM_EN,
-	TM_IN => TM_IN
+	TM_IN => TM_IN,
+	USER => USER
 	);
 init : PROCESS                                                                                   
 BEGIN                                                        
@@ -102,6 +108,7 @@ always : PROCESS
 
 BEGIN                                                      
 -- First case, Table not at the last value and the value was found on the first try.
+		USER <= '0';
 		START <= '0';
 		READY <= '0';
 		SC_CMP <= '0';
@@ -120,14 +127,14 @@ BEGIN
 		SC_CMP <= '1';
 		wait for 100 ns;
 		
--- Second case, at the last value and the value was found on the first try.
+-- Second case, at the last value and the value was found on the second try.
 		START <= '0';
 		READY <= '0';
 		SC_CMP <= '0';
 		wait for 100 ns;
 		
 		START <= '1';
-		wait for 20 ns;
+		wait for 40 ns;
 		
 		TC_LAST <= '0';
 		wait for 320 ns;
@@ -136,10 +143,10 @@ BEGIN
 		wait for 100 ns;
 		
 		READY <= '1';
-		wait for 20 ns;
+		wait for 40 ns;
 		
 		SC_CMP <= '0';
-		wait for 20 ns;
+		wait for 40 ns;
 		
 		TC_LAST <= '0';
 		wait for 200 ns;
@@ -155,8 +162,6 @@ BEGIN
 		
 		SC_CMP <= '1';
 		
-		wait;
-		
-WAIT;                                                        
+		wait;                                                  
 END PROCESS always;                                          
 END g14_mastermind_controller_arch;
