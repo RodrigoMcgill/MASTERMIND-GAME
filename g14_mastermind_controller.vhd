@@ -4,15 +4,17 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 entity g14_mastermind_controller is 
-port(	SC_CMP,TC_LAST,START,READY,CLK	: in std_logic;
+port(	SC_CMP,TC_LAST,START					: in std_logic;
+		USER, READY,CLK						: in std_logic;
 		SR_SEL,P_SEL,GR_SEL,GR_LD,SR_LD	: out std_logic;
-		TM_IN,TM_EN,TC_EN,TC_RST,SOLVED	: out std_logic);
+		TM_IN,TM_EN,TC_EN,TC_RST,SOLVED	: out std_logic;
+		SD_EN										: out std_logic);
 
 end g14_mastermind_controller;
 
 architecture behavior of g14_mastermind_controller is
 	signal isSolved : std_logic;
-	TYPE state_type IS (waitStart,resetCounter,setTable,waitReady,checkGuess,addScore,getNextGuess,last);
+	TYPE state_type IS (waitStart,resetCounter,setTable,waitReady,checkGuess,addScore,getNextGuess, displayResult, last);
 	Signal y : state_type;
 	signal output : std_logic_vector(9 downto 0);
 
@@ -63,24 +65,27 @@ begin
 
 -- waits for Ready signal from the oponent
 			when waitReady =>
+			SD_EN <= '1';
 			if(START = '0') then 
 					y <= waitStart;
 			elsif(READY = '0') then
-			-- If the guess comes from the setTable
+			-- If the guess comes from the setTable or the displayResult states
 					if(TC_LAST = '1') then
-								output <= "1011100000";
+							output <= "1011100000";
 			-- If the guess comes form the getNextGuess 
 					elsif(TC_LAST = '0') then
-								output <= "1001100000";
+							output <= "1001100000";
 		         end if;
 			elsif(READY='1') then
 			--verifies that the gues is correct
+					SD_EN <='0';
 					output <= "1000000000";
 					y <= checkGuess;
 			end if;
 			
 -- checks if the first trivial guess is correct
 			when checkGuess =>
+				SD_EN <= '0';
 				output <= "1000000000";
 				if(START = '0') then 
 					y <= waitStart;
@@ -92,17 +97,21 @@ begin
 						
 				-- If the guess is not correct add the value to the table
 				elsif (SC_CMP = '0') then
-						-- This is for the first call to the table, 
-						-- TC_RST = 1 so the table starts at first element
-						if(TC_LAST = '1')then
+				-- This is if the player is a human
+						if(USER = '1') then
+							SD_EN <='1';
+							y <= displayResult;
+				-- This is for the first call to the table, 
+				-- TC_RST = 1 so the table starts at first element
+						elsif(TC_LAST = '1')then
 							output <= "0100000010";
+							y <= addScore;
 				-- This is for all subsequent guesses, 
 				-- TC_RST = 0 so the table continues at current values
 						elsif(TC_LAST = '0') then 
 							output <= "0100000000";
 							y <= addScore;
 				      end if;
-						
 				end if;
 
 -- is the guess is not correct it adds the result into the possibility table	
@@ -125,10 +134,19 @@ begin
 				
 -- take the first value of the possibility table that is non zero
 			when getNextGuess =>
+				SD_EN<='1';
 				output <= "1000000000";
 				if(START = '0') then 
 					y <= waitStart;
 				elsif(READY = '0') then
+					y <= waitReady;
+				end if;
+				
+-- Displays the result of the human user.			
+			when displayResult =>
+				SD_EN <= '0';
+				output <= "1000000000";
+				if(READY = '0') then
 					y <= waitReady;
 				end if;
 				
@@ -140,6 +158,7 @@ begin
 				else 
 				   y <= LAST;
 				end if;
+		
 		end case;
 	end if;
 end process;
