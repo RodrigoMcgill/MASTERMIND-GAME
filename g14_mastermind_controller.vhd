@@ -5,7 +5,7 @@ use ieee.std_logic_1164.all;
 
 entity g14_mastermind_controller is 
 port(	SC_CMP,TC_LAST,START					: in std_logic;
-		USER, READY,CLK						: in std_logic;
+		USER, READY,CLK, usr_rst			: in std_logic;
 		SR_SEL,P_SEL,GR_SEL,GR_LD,SR_LD	: out std_logic;
 		TM_IN,TM_EN,TC_EN,TC_RST,SOLVED	: out std_logic;
 		SD_EN										: out std_logic);
@@ -77,10 +77,16 @@ begin
 							output <= "1001100000";
 		         end if;
 			elsif(READY='1') then
-			--verifies that the gues is correct
-					SD_EN <='0';
-					output <= "1000000000";
-					y <= checkGuess;
+					if(usr_rst = '0' and user = '1') then
+						SD_EN <='0';
+						output <= "1000000000";
+						y <= checkGuess;
+					elsif (User = '0') then
+					--verifies that the gues is correct
+						SD_EN <='0';
+						output <= "1000000000";
+						y <= checkGuess;
+					end if;
 			end if;
 			
 -- checks if the first trivial guess is correct
