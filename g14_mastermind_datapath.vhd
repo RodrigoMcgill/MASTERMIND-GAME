@@ -7,7 +7,7 @@ port( SR_SEL,P_SEL,GR_SEL,GR_LD,SR_LD	: in std_logic;
 		TM_IN,TM_EN,TC_EN,TC_RST, CLK		: in std_logic;
 		EXIT_PATTERN,GUESS 					: in std_LOGIC_VECTOR(11 downto 0);
 		DGUESS									: out std_logic_vector(11 downto 0);
-		sc											: out std_logic_vector(3 downto 0);
+		xcore										: out std_logic_vector(3 downto 0);
 		SC_CMP,TC_LAST							: out std_logic);
 end g14_mastermind_datapath;
 
@@ -52,7 +52,7 @@ port(	data 			: in std_logic_vector(N downto 0);
 end component;
 
 begin
-
+xcore<= MUXS;
 with SR_SEL select MUXS <=
 				score&"00" when '0',
 				"110100" when others;
@@ -61,6 +61,8 @@ with SR_SEL select MUXS <=
 with P_SEL select P <=
 				TM_ADDR when '1',
 				EXIT_PATTERN when others;
+
+DGUESS<=MUXG;
 				
 with GR_SEL select MUXG <=
 				TM_ADDR when '0',

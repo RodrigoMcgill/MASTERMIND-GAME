@@ -7,7 +7,7 @@ port( position						: in std_logic_vector(1 downto 0);
 		color							: in std_logic_vector(2 downto 0);
 		TC_EN, USER, USR_RST		: in std_logic;
 		START, CLK					: in std_logic;
-		EXT_PAT, GUESS				: out std_logic_vector(11 downto 0));
+		EXT_PAT, GUESS, GUI		: out std_logic_vector(11 downto 0));
 
 end g14_user_interface;
 
@@ -22,6 +22,11 @@ port(	CLK, TC_EN	: in std_logic;
 end component;
 
 begin
+
+gui(11 downto 9)<= p4;
+gui(8 downto 6)<= p3;
+gui(5 downto 3)<= p2;
+gui(2 downto 1)<= p1;
 
 gen : g14_random_num_gen port map(CLK=>CLK, TC_EN=> TC_EN, numb => bot);
 
