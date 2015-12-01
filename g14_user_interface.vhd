@@ -1,4 +1,4 @@
---Rodrigo
+--Rodrigo and Juan
 library ieee;
 use ieee.std_logic_1164.all;
 
@@ -21,7 +21,6 @@ port(	CLK, TC_EN	: in std_logic;
 
 end component;
 
--- component g14_7_segment_decoder is
 begin
 
 gen : g14_random_num_gen port map(CLK=>CLK, TC_EN=> TC_EN, numb => bot);
