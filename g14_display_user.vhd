@@ -19,6 +19,7 @@ signal d3, d4 : std_logic;
 signal c1, c2, c3, c4 : std_logic_vector(3 downto 0);
 signal g1, g2, g3, g4 : std_logic_vector(3 downto 0);
 signal u1, u2, u3, u4 : std_logic_vector(3 downto 0);
+signal xcore			 : std_logic_vector(7 downto 0);
 
 component g14_7_segment_decoder is
 port(code : in std_logic_vector(3 downto 0);
@@ -33,12 +34,14 @@ port(	code : in std_logic_vector(2 downto 0);
 
 end component;
 
-component g14_mscore_to_hex is
-port(
-		);
+component g14_MDecoder_to_hex is
+Port( code_in:          in std_logic_vector(3 downto 0);
+		code_for_LEDS : out std_logic_vector(7 downto 0));
 
 end component;
 begin
+
+xd: g14_MDecoder_to_hex port map (code_in => score, code_for_LEDS => xcore);
 
 process (DS_EN,SOLVED) 
 begin
@@ -55,13 +58,13 @@ begin
 					g3<=u3;
 					g4<=u4;
 				elsif(SOLVED ='1') then
-					g1<="00"&score(1 downto 0);
-					g2<="00"&score(3 downto 2);
+					g1<=xcore(3 downto 0);
+					g2<=xcore(7 downto 4);
 					g3<="1110"; -- victory!
 					g4<="0000";
 				elsif(solved = '0' and USR_RST = '0' and check = '0') then
-					g1<="00"&score(1 downto 0);
-					g2<="00"&score(3 downto 2);
+					g1<=xcore(3 downto 0);
+					g2<=xcore(7 downto 4);
 					g3<="0000";
 					g4<="0000";
 				end if;
@@ -72,13 +75,13 @@ begin
 					g3<=c3;
 					g4<=c4;
 				elsif(SOLVED ='1') then
-					g1<="00"&score(1 downto 0);
-					g2<="00"&score(3 downto 2);
+					g1<=xcore(3 downto 0);
+					g2<=xcore(7 downto 4);
 					g3<="1110"; -- victory!
 					g4<="0000";
 				elsif(READY = '0' and solved = '0') then
-					g1<="00"&score(1 downto 0);
-					g2<="00"&score(3 downto 2);
+					g1<=xcore(3 downto 0);
+					g2<=xcore(7 downto 4);
 					g3<="0000";
 					g4<="0000";
 				end if;
@@ -94,7 +97,7 @@ begin
 					g2<=u2;
 					g3<=u3;
 					g4<=u4;
-				else() then
+				else
 					g1<="0000";
 					g2<="0000";
 					g3<="0000";

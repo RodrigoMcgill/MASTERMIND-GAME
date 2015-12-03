@@ -5,7 +5,7 @@ entity g14_MDecoder_to_hex is
 Port( code_in:          in std_logic_vector(3 downto 0);
 		code_for_LEDS : out std_logic_vector(7 downto 0));
 
-		end g14_MDecoder_to_hex;
+end g14_MDecoder_to_hex;
 		
 architecture impl of g14_MDecoder_to_hex is
 		
