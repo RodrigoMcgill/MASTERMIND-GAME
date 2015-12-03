@@ -52,7 +52,7 @@ port(	data 			: in std_logic_vector(N downto 0);
 end component;
 
 begin
-xcore<= MUXS;
+xcore<= MUXS(5 downto 2);
 with SR_SEL select MUXS <=
 				score&"00" when '0',
 				"110100" when others;

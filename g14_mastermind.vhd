@@ -36,7 +36,7 @@ port(  SR_SEL,P_SEL,GR_SEL,GR_LD,SR_LD	: in std_logic;
 		TM_IN,TM_EN,TC_EN,TC_RST, CLK		: in std_logic;
 		EXIT_PATTERN,GUESS 					: in std_LOGIC_VECTOR(11 downto 0);
 		DGUESS									: out std_logic_vector(11 downto 0);
-		sc											: out std_logic_vector(3 downto 0);
+		xcore										: out std_logic_vector(3 downto 0);
 		SC_CMP,TC_LAST							: out std_logic);
 end component;
 
@@ -72,7 +72,7 @@ disp: g14_display_user port map(score=>sc, guess=>GD, DS_EN=>SD_EN, usr_RST=>usr
 
 Dpath: g14_mastermind_datapath port map(TC_RST=>TC_RST, TC_EN=>TC_EN, TM_EN=> TM_en, tm_in=>tm_in,
 														gr_ld=>gr_ld, sr_LD=> sr_LD, gr_sel=>gr_SEL, P_sEL=>P_sel, SR_sel=>SR_sel,clk => clk,
-														EXIT_PATTERN=>P, GUESS=>G, SC_CMP=>SC_CMP, TC_LAST=>TC_LAST, sc=>sc, Dguess=>GD);
+														EXIT_PATTERN=>P, GUESS=>G, SC_CMP=>SC_CMP, TC_LAST=>TC_LAST, xcore=>sc, Dguess=>GD);
 
 interface: g14_user_interface port map(user=> user, usr_RST=>usr_RST, TC_EN=>RNG, START=>STArT, ext_PAT=>P, guess=>G, clk=>clk, gui => gui,
 													position => position, color => color);

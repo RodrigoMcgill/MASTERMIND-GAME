@@ -26,7 +26,7 @@ begin
 gui(11 downto 9)<= p4;
 gui(8 downto 6)<= p3;
 gui(5 downto 3)<= p2;
-gui(2 downto 1)<= p1;
+gui(2 downto 0)<= p1;
 
 gen : g14_random_num_gen port map(CLK=>CLK, TC_EN=> TC_EN, numb => bot);
 

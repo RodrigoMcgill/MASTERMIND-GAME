@@ -36,6 +36,7 @@ begin
 		
 -- waits for the start signal which means a new game.
 			when waitStart =>
+				SD_EN<='1';
 				output <= "0000000000";
 				if(START = '1') then                 
 					y <= resetCounter;       

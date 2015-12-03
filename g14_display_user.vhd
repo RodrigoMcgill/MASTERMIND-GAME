@@ -18,6 +18,7 @@ architecture beh of g14_display_user is
 signal d3, d4 : std_logic;
 signal c1, c2, c3, c4 : std_logic_vector(3 downto 0);
 signal g1, g2, g3, g4 : std_logic_vector(3 downto 0);
+signal u1, u2, u3, u4 : std_logic_vector(3 downto 0);
 
 component g14_7_segment_decoder is
 port(code : in std_logic_vector(3 downto 0);
@@ -43,7 +44,7 @@ begin
 					g2<=c2;
 					g3<=c3;
 					g4<=c4;
-				if(READY = '0' and USR_RST = '1') then
+				elsif(READY = '0' and USR_RST = '1') then
 					g1<=u1;
 					g2<=u2;
 					g3<=u3;
@@ -51,7 +52,7 @@ begin
 				elsif(SOLVED ='1') then
 					g1<="00"&score(1 downto 0);
 					g2<="00"&score(3 downto 2);
-					g3<="1110" -- victory!
+					g3<="1110"; -- victory!
 					g4<="0000";
 				elsif(solved = '0' and USR_RST = '0' and check = '0') then
 					g1<="00"&score(1 downto 0);
@@ -59,7 +60,7 @@ begin
 					g3<="0000";
 					g4<="0000";
 				end if;
-			elsif(USRr = '0')then
+			elsif(USR = '0')then
 				if(CHECK = '1') then
 					g1<=c1;
 					g2<=c2;
@@ -68,22 +69,23 @@ begin
 				elsif(SOLVED ='1') then
 					g1<="00"&score(1 downto 0);
 					g2<="00"&score(3 downto 2);
-					g3<="1110" -- victory!
+					g3<="1110"; -- victory!
 					g4<="0000";
 				elsif(READY = '0' and solved = '0') then
 					g1<="00"&score(1 downto 0);
 					g2<="00"&score(3 downto 2);
 					g3<="0000";
 					g4<="0000";
+				end if;
 			end if;
 		end if;
 
 end process;
 
-dec1: g14_color_decoder port map(code=>userIN(2 downto 0),color=>u1);
-dec2: g14_color_decoder port map(code=>userIN(5 downto 3),color=>u2);
-dec3: g14_color_decoder port map(code=>userIN(8 downto 6),color=>u3);
-dec4: g14_color_decoder port map(code=>userIN(11 downto 9),color=>u4);
+gui1: g14_color_decoder port map(code=>userIN(2 downto 0),color=>u1);
+gui2: g14_color_decoder port map(code=>userIN(5 downto 3),color=>u2);
+gui3: g14_color_decoder port map(code=>userIN(8 downto 6),color=>u3);
+gui4: g14_color_decoder port map(code=>userIN(11 downto 9),color=>u4);
 
 dec1: g14_color_decoder port map(code=>guess(2 downto 0),color=>c1);
 dec2: g14_color_decoder port map(code=>guess(5 downto 3),color=>c2);
