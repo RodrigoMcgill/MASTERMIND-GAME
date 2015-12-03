@@ -33,6 +33,11 @@ port(	code : in std_logic_vector(2 downto 0);
 
 end component;
 
+component g14_mscore_to_hex is
+port(
+		);
+
+end component;
 begin
 
 process (DS_EN,SOLVED) 
@@ -78,6 +83,23 @@ begin
 					g4<="0000";
 				end if;
 			end if;
+			elsif(DS_EN='0')then
+				if(CHECK = '1') then
+					g1<=c1;
+					g2<=c2;
+					g3<=c3;
+					g4<=c4;
+				elsif(USR_RST = '1') then
+					g1<=u1;
+					g2<=u2;
+					g3<=u3;
+					g4<=u4;
+				else() then
+					g1<="0000";
+					g2<="0000";
+					g3<="0000";
+					g4<="0000";
+				end if;			
 		end if;
 
 end process;
