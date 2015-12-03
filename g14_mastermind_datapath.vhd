@@ -52,7 +52,7 @@ port(	data 			: in std_logic_vector(N downto 0);
 end component;
 
 begin
-xcore<= MUXS(5 downto 2);
+xcore<= RegSc(5 downto 2);
 with SR_SEL select MUXS <=
 				score&"00" when '0',
 				"110100" when others;
@@ -62,7 +62,7 @@ with P_SEL select P <=
 				TM_ADDR when '1',
 				EXIT_PATTERN when others;
 
-DGUESS<=MUXG;
+DGUESS<=G;
 				
 with GR_SEL select MUXG <=
 				TM_ADDR when '0',
@@ -70,7 +70,9 @@ with GR_SEL select MUXG <=
 
 sc <= score&"00";
 
-Mscore: g14_mastermind_score port map(P1=>P(11 downto 9), P2 =>P(8 downto 6), P3=>P(5 downto 3),P4=>P(2 downto 0), G1=>G(11 downto 9), G2 =>G(8 downto 6), G3=>G(5 downto 3),G4=>G(2 downto 0),score_code=>score, exact_match_score=>ground, color_match_score=>ground);
+Mscore: g14_mastermind_score port map(P1=>P(11 downto 9), P2 =>P(8 downto 6), P3=>P(5 downto 3),P4=>P(2 downto 0), 
+													G1=>G(11 downto 9), G2 =>G(8 downto 6), G3=>G(5 downto 3),G4=>G(2 downto 0),
+													score_code=>score, exact_match_score=>ground, color_match_score=>ground);
 												  
 PosTab: g14_possibility_table port map(TC_EN=>TC_EN, TC_RST=>TC_RST, TM_IN=>TM_IN, TM_EN=>TM_EN, CLK=>CLK,
 													TC_LAST=>TC_LAST, TM_ADDR=>TM_ADDR, TM_OUT=>ground(0));

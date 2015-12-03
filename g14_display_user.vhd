@@ -38,7 +38,7 @@ begin
 process (DS_EN,SOLVED) 
 begin
 		if(DS_EN = '1') then
-			if(USR = '1')then
+			if(USR = '0')then
 				if(CHECK = '1') then
 					g1<=c1;
 					g2<=c2;
@@ -60,7 +60,7 @@ begin
 					g3<="0000";
 					g4<="0000";
 				end if;
-			elsif(USR = '0')then
+			elsif(USR = '1')then
 				if(CHECK = '1') then
 					g1<=c1;
 					g2<=c2;
