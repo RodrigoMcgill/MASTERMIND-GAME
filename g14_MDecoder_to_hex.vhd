@@ -18,7 +18,7 @@ architecture impl of g14_MDecoder_to_hex is
 				when "0001" => code_for_LEDS <= "00000001"; --0,1
 				when "0010" => code_for_LEDS <= "00000010"; --0,2
 				when "0011" => code_for_LEDS <= "00000011"; --0,3
-				when "0100" => code_for_LEDS <= "00001000"; --0,4
+				when "0100" => code_for_LEDS <= "00000100"; --0,4
 				when "0101" => code_for_LEDS <= "00010000"; --1,0
 				when "0110" => code_for_LEDS <= "00010001"; --1,1
 				when "0111" => code_for_LEDS <= "00010010"; --1,2
@@ -27,7 +27,7 @@ architecture impl of g14_MDecoder_to_hex is
 				when "1010" => code_for_LEDS <= "00100001"; --2,1
 		      when "1011" => code_for_LEDS <= "00100010"; --2,2
 				when "1100" => code_for_LEDS <= "00110000"; --3,0
-				when "1101" => code_for_LEDS <= "10000000"; --4,0
+				when "1101" => code_for_LEDS <= "01000000"; --4,0
 				when others => code_for_LEDS <= "11111111"; -- others
 				end case;
 			end process;
