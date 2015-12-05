@@ -125,33 +125,32 @@ begin
 			when addScore =>
 				if(START = '0') then 
 					y <= waitStart;
-				-- This case should never happen, but incase it does, it will restart the table.
-				elsif(TC_LAST = '1' and SC_CMP = '0') then
-					output <= "0100001100";
 				-- If the ADRR doesn't give the same result to the previous guess
 				-- It makes the value at the table 0 and go to the next ADRR
-				elsif(SC_CMP = '0') then
+				elsif(TC_LAST = '0') then
 					output <= "0100001100";
 				-- If the ADRR gives the same result to the previous guess.
 				-- Stops the clock and  goes to wait for ready signal.
-				elsif(SC_CMP = '1') then
-					output <= "0100011000";
+				elsif(TC_LAST = '1') then
+					output <= "0100000010";
 					y <= getNextGuess;
 				end if;
 				
 -- take the first value of the possibility table that is non zero
 			when getNextGuess =>
-				SD_EN<='1';
-				output <= "1000000000";
 				if(START = '0') then 
 					y <= waitStart;
-				elsif(READY = '0') then
+				elsif(SC_CMP = '0') then
+					output <= "0100000100";
+				elsif(SC_CMP = '1') then
+					output <= "0100000000";
+				elsif(ready = '0' and SC_CMP = '1') then
 					y <= waitReady;
 				end if;
 				
 -- Displays the result of the human user.			
 			when displayResult =>
-				SD_EN <= '0';
+				SD_EN <= '1';
 				output <= "1000000000";
 				if(READY = '0') then
 					y <= waitReady;

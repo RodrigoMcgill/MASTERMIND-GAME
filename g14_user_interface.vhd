@@ -31,11 +31,11 @@ gui(2 downto 0)<= p1;
 gen : g14_random_num_gen port map(CLK=>CLK, TC_EN=> TC_EN, numb => bot);
 
 with USER select P<=
-	p4&p3&p2&p1 when '1',
+	p4&p3&p2&p1 when '0',
 	bot when others;
 
 with USER select G<=
-	p4&p3&p2&p1 when '0',
+	p4&p3&p2&p1 when '1',
 	"000000000000" when others;
 
 process (CLK,USR_RST)

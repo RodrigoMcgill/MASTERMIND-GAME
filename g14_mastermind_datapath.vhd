@@ -12,10 +12,12 @@ port( SR_SEL,P_SEL,GR_SEL,GR_LD,SR_LD	: in std_logic;
 end g14_mastermind_datapath;
 
 architecture implementation of g14_mastermind_datapath is
-signal P,G,TM_ADDR,MUXG	: std_logic_vector(11 downto 0);
-signal score,RS			: std_logic_vector(3 downto 0);
-signal ground				: std_logic_vector(2 downto 0);
-signal MUXS, RegSc, sc	: std_logic_vector(5 downto 0);
+signal P,G,TM_ADDR,MUXG			: std_logic_vector(11 downto 0);
+signal score,RS					: std_logic_vector(3 downto 0);
+signal ground						: std_logic_vector(2 downto 0);
+signal MUXS, RegSc, sc			: std_logic_vector(5 downto 0);
+signal TM_OUT,cmp,com			: std_logic;
+signal inPT,TC, stop				: std_logic;
 
 component g14_mastermind_score is
 		port( P1,P2,P3,P4      : in  std_logic_vector(2 downto 0);
@@ -70,17 +72,28 @@ with GR_SEL select MUXG <=
 
 sc <= score&"00";
 
+com<= cmp and TM_OUT;
+inPT<= com or TM_IN;
+SC_CMP<=cmp and TM_out;
+stop <= TC_EN and (not TM_OUT);
+
+with TM_EN select TC <=
+				TC_EN when '1',
+				stop when others;
+
+
 Mscore: g14_mastermind_score port map(P1=>P(11 downto 9), P2 =>P(8 downto 6), P3=>P(5 downto 3),P4=>P(2 downto 0), 
 													G1=>G(11 downto 9), G2 =>G(8 downto 6), G3=>G(5 downto 3),G4=>G(2 downto 0),
-													score_code=>score, exact_match_score=>ground, color_match_score=>ground);
+													score_code=>score);
 												  
-PosTab: g14_possibility_table port map(TC_EN=>TC_EN, TC_RST=>TC_RST, TM_IN=>TM_IN, TM_EN=>TM_EN, CLK=>CLK,
-													TC_LAST=>TC_LAST, TM_ADDR=>TM_ADDR, TM_OUT=>ground(0));
+PosTab: g14_possibility_table port map(TC_EN=>TC, TC_RST=>TC_RST, TM_IN=>inPT, TM_EN=>TM_EN, CLK =>CLK,
+													TC_LAST=>TC_LAST, TM_ADDR=>TM_ADDR, TM_OUT=>TM_OUT);
 													
-ScoreComparator: g14_comp6 port map(A=>RegSc,B=>MUXS,AeqB=>SC_CMP);
+ScoreComparator: g14_comp6 port map(A=>RegSc,B=>MUXS,AeqB=>cmp);
 
 ScoreRegister: g14_register port map(data => sc, enable => SR_LD, display => RegSc, clk=>clk);
 
 guessRegister: g14_register generic map(N => 11) port map(data => MUXG, enable => GR_LD,display=>G,CLK=>clk);
+
 
 end implementation;

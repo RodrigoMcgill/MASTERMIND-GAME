@@ -95,7 +95,7 @@ END PROCESS init;
 always : PROCESS                                              
                                      
 BEGIN                                                         
-        user <= '1';
+      user <= '0';
 		  start<= '0';
 		  ready<= '0';
 		  check<= '0';
@@ -108,7 +108,7 @@ BEGIN
 		  start<='1';
 		  usr_RST<= '1';
 		  RNG<='1';
-		  wait for 70 ns;
+		  wait for 90 ns;
 		  
 		  position<="01";
 		  color<="001";
@@ -129,11 +129,10 @@ BEGIN
 		  start<= '1';
 		  wait for 100000 ns;
 		  
-		  check<='1';
-		  wait for 1000 ns;
+		  wait for 50 ns;
 		  
 		  ready<= '1';
-		  wait for 100 ns;
+		  wait for 200000 ns;
 		  
 		  ready<='0';
 		  
