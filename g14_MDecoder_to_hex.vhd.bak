@@ -1,6 +1,4 @@
---Juan Carlos Borges
---Rodrigo Mendoza
--- December 4th, 2015
+--Rodrigo
 library IEEE;
 USE ieee.std_logic_1164.all;
 entity g14_MDecoder_to_hex is

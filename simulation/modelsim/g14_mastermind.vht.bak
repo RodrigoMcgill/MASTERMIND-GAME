@@ -22,9 +22,7 @@
 -- Vhdl Test Bench template for design  :  g14_mastermind
 -- 
 -- Simulation tool : ModelSim-Altera (VHDL)
--- --Juan Carlos Borges
---Rodrigo Mendoza
--- December 4th, 2015
+-- 
 
 LIBRARY ieee;                                               
 USE ieee.std_logic_1164.all;                                
@@ -97,7 +95,7 @@ END PROCESS init;
 always : PROCESS                                              
                                      
 BEGIN                                                         
-		  user <= '0';
+      user <= '0';
 		  start<= '0';
 		  ready<= '0';
 		  check<= '0';
@@ -107,52 +105,36 @@ BEGIN
 		  RNG<='0';
 		  wait for 70 ns;
 		  
-		  user <= '0';
-		  start<= '0';
-		  ready<= '0';
-		  check<= '0';
-		  usr_RST<= '0';
-		  position<="00";
-		  color<="000";
-		  RNG<='0';
-		  wait for 50 ns;
-		  
 		  start<='1';
-		  user <= '0';
+		  usr_RST<= '1';
+		  RNG<='1';
+		  wait for 90 ns;
 		  
-		  wait for 20 ns;
-		  
-		  usr_RST <= '1';
-		  
-		  position <="00";
-		  color <= "001"
 		  position<="01";
 		  color<="001";
-		  wait for 50 ns;
-		 
+		  wait for 60 ns;
+		  
+		  RNG<='0';
 		  position<="11";
-		  color<="001";
-		  wait for 50 ns;
+		  color<="010";
+		  wait for 80 ns;
 		  
 		  position<="10";
-		  color<="001";
+		  color<="010";
+		  wait for 90 ns;
+		  
+		  USR_RST<='0';
 		  wait for 50 ns;
 		  
-		  usr_RST <= '0';
+		  start<= '1';
+		  wait for 100000 ns;
 		  
-		  ready <= '1';
+		  wait for 50 ns;
 		  
-		  wait for 20ns;
+		  ready<= '1';
+		  wait for 200000 ns;
 		  
-		  ready <='0';
-		  
-		  usr_RST <= '0';
-		  
-		  
-		  
-		  
-		  
-		 
+		  ready<='0';
 		  
 WAIT;                                                        
 END PROCESS always;                                          
