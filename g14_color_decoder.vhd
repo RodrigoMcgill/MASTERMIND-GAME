@@ -1,5 +1,4 @@
---Juan Carlos Borges
---Rodrigo Mendoza
+--@author:Rodrigo Mendoza
 -- December 4th, 2015
 library ieee;
 use ieee.std_logic_1164.all;
