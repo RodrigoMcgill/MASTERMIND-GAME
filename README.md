@@ -1,5 +1,5 @@
 # MASTERMIND GAME
-This was a semester long project part.
+This was a semester long project part. This code was implementd using the Altera Quartus II board.
 Course: Digital System Design (ECSE 323)
 Language used: VHDL
 Features:
