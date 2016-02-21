@@ -7,6 +7,8 @@ Features:
 -Runs on 50 a 50MhZ  clock
 -2 modes of operations: 1) User Guessing Mode
                         2) System Guessing Mode
--Use 4 LEDS
+-Uses 4 LEDS
+-Contains 10 switches
+-4 Push Buttons
 
 
